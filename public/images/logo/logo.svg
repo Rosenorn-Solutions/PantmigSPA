@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="28" viewBox="0 0 160 28" fill="none">
+	<g>
+		<rect x="0" y="2" width="26" height="26" rx="6" fill="#22c55e"/>
+		<path d="M8 15c0-3.866 3.582-7 8-7s8 3.134 8 7h-7c-.552 0-1-.448-1-1V8c-3.314 0-8 2.686-8 7z" fill="white" opacity="0.85"/>
+	</g>
+		<text x="32" y="20" font-family="Inter, Arial, Helvetica, sans-serif" font-weight="700" font-size="16" fill="#ffffff">PantMig</text>
+</svg>

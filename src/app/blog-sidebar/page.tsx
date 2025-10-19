@@ -1,4 +1,5 @@
 import RelatedPost from "@/components/Blog/RelatedPost";
+import blogData from "@/components/Blog/blogData";
 import SharePost from "@/components/Blog/SharePost";
 import TagButton from "@/components/Blog/TagButton";
 import NewsLatterBox from "@/components/Contact/NewsLatterBox";
@@ -21,8 +22,7 @@ const BlogSidebarPage = () => {
             <div className="w-full px-4 lg:w-8/12">
               <div>
                 <h1 className="mb-8 text-3xl leading-tight font-bold text-black sm:text-4xl sm:leading-tight dark:text-white">
-                  10 amazing sites to download stock photos & digital assets for
-                  free
+                  Seneste fra bloggen
                 </h1>
                 <div className="border-body-color/10 mb-10 flex flex-wrap items-center justify-between border-b pb-4 dark:border-white/10">
                   <div className="flex flex-wrap items-center">
@@ -30,16 +30,14 @@ const BlogSidebarPage = () => {
                       <div className="mr-4">
                         <div className="relative h-10 w-10 overflow-hidden rounded-full">
                           <Image
-                            src="/images/blog/author-02.png"
-                            alt="author"
+                            src="/images/blog/auth-02.svg"
+                            alt="forfatter"
                             fill
                           />
                         </div>
                       </div>
                       <div className="w-full">
-                        <span className="text-body-color mb-1 text-base font-medium">
-                          By <span> Musharof Chy</span>
-                        </span>
+                        <span className="text-body-color mb-1 text-base font-medium">Af <span>PantMig Team</span></span>
                       </div>
                     </div>
                     <div className="mb-5 flex items-center">
@@ -62,7 +60,7 @@ const BlogSidebarPage = () => {
                             <path d="M13.2637 3.3697H7.64754V2.58105C8.19721 2.43765 8.62738 1.91189 8.62738 1.31442C8.62738 0.597464 8.02992 0 7.28906 0C6.54821 0 5.95074 0.597464 5.95074 1.31442C5.95074 1.91189 6.35702 2.41376 6.93058 2.58105V3.3697H1.31442C0.597464 3.3697 0 3.96716 0 4.68412V13.2637C0 13.9807 0.597464 14.5781 1.31442 14.5781H13.2637C13.9807 14.5781 14.5781 13.9807 14.5781 13.2637V4.68412C14.5781 3.96716 13.9807 3.3697 13.2637 3.3697ZM6.6677 1.31442C6.6677 0.979841 6.93058 0.716957 7.28906 0.716957C7.62364 0.716957 7.91042 0.979841 7.91042 1.31442C7.91042 1.649 7.64754 1.91189 7.28906 1.91189C6.95448 1.91189 6.6677 1.6251 6.6677 1.31442ZM1.31442 4.08665H13.2637C13.5983 4.08665 13.8612 4.34954 13.8612 4.68412V6.45261H0.716957V4.68412C0.716957 4.34954 0.979841 4.08665 1.31442 4.08665ZM13.2637 13.8612H1.31442C0.979841 13.8612 0.716957 13.5983 0.716957 13.2637V7.16957H13.8612V13.2637C13.8612 13.5983 13.5983 13.8612 13.2637 13.8612Z" />
                           </svg>
                         </span>
-                        12 Jan 2024
+                        12. jan. 2025
                       </p>
                       <p className="text-body-color mr-5 flex items-center text-base font-medium">
                         <span className="mr-3">
@@ -114,56 +112,29 @@ const BlogSidebarPage = () => {
                     <div className="relative aspect-97/60 w-full sm:aspect-97/44">
                       <Image
                         src="/images/blog/blog-details-01.jpg"
-                        alt="image"
+                        alt="Pant og genbrug i hverdagen"
                         fill
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
                   </div>
                   <p className="text-body-color mb-8 text-base leading-relaxed font-medium sm:text-lg sm:leading-relaxed lg:text-base lg:leading-relaxed xl:text-lg xl:leading-relaxed">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Quis enim lobortis scelerisque fermentum. Neque
-                    sodales ut etiam sit amet. Ligula ullamcorper
-                    <strong className="text-primary dark:text-white">
-                      {" "}
-                      malesuada{" "}
-                    </strong>
-                    proin libero nunc consequat interdum varius. Quam
-                    pellentesque nec nam aliquam sem et tortor consequat.
-                    Pellentesque adipiscing commodo elit at imperdiet.
+                    Pant er en nem måde at gøre en forskel på. Med faste vaner om sortering og aflevering skaber vi mere genanvendelse – og mindre rod i hjemmet.
                   </p>
                   <p className="text-body-color mb-10 text-base leading-relaxed font-medium sm:text-lg sm:leading-relaxed lg:text-base lg:leading-relaxed xl:text-lg xl:leading-relaxed">
-                    Semper auctor neque vitae tempus quam pellentesque nec.
-                    <span className="text-primary underline dark:text-white">
-                      {" "}
-                      Amet dictum sit amet justo{" "}
-                    </span>
-                    donec enim diam. Varius sit amet mattis vulputate enim nulla
-                    aliquet porttitor. Odio pellentesque diam volutpat commodo
-                    sed.
+                    Har du travlt? Brug PantMig til at få pant hentet – hurtigt og nemt.
                   </p>
                   <h3 className="font-xl mb-10 leading-tight font-bold text-black sm:text-2xl sm:leading-tight lg:text-xl lg:leading-tight xl:text-2xl xl:leading-tight dark:text-white">
-                    Digital marketplace for Ui/Ux designers.
+                    Gode vaner med pant
                   </h3>
                   <p className="text-body-color mb-10 text-base leading-relaxed font-medium sm:text-lg sm:leading-relaxed lg:text-base lg:leading-relaxed xl:text-lg xl:leading-relaxed">
-                    consectetur adipiscing elit in voluptate velit esse cillum
-                    dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                    mattis vulputate cupidatat.
+                    Opbevar pant ét sted, skyl let – og sæt en påmindelse om aflevering eller afhentning. Små rutiner giver stor effekt.
                   </p>
                   <ul className="text-body-color mb-10 list-inside list-disc">
-                    <li className="text-body-color mb-2 text-base font-medium sm:text-lg lg:text-base xl:text-lg">
-                      Consectetur adipiscing elit in voluptate velit.
-                    </li>
-                    <li className="text-body-color mb-2 text-base font-medium sm:text-lg lg:text-base xl:text-lg">
-                      Mattis vulputate cupidatat.
-                    </li>
-                    <li className="text-body-color mb-2 text-base font-medium sm:text-lg lg:text-base xl:text-lg">
-                      Vulputate enim nulla aliquet porttitor odio pellentesque
-                    </li>
-                    <li className="text-body-color mb-2 text-base font-medium sm:text-lg lg:text-base xl:text-lg">
-                      Ligula ullamcorper malesuada proin
-                    </li>
+                    <li className="text-body-color mb-2 text-base font-medium sm:text-lg lg:text-base xl:text-lg">Skyl og sorter med det samme.</li>
+                    <li className="text-body-color mb-2 text-base font-medium sm:text-lg lg:text-base xl:text-lg">Saml pant et fast sted.</li>
+                    <li className="text-body-color mb-2 text-base font-medium sm:text-lg lg:text-base xl:text-lg">Aftal afhentning ved travlhed.</li>
+                    <li className="text-body-color mb-2 text-base font-medium sm:text-lg lg:text-base xl:text-lg">Få familien med – gør det let.</li>
                   </ul>
                   <div className="bg-primary/10 relative z-10 mb-10 overflow-hidden rounded-md p-8 md:p-9 lg:p-8 xl:p-9">
                     <p className="text-body-color text-center text-base font-medium italic">
@@ -320,19 +291,15 @@ const BlogSidebarPage = () => {
                   </p>
                   <div className="items-center justify-between sm:flex">
                     <div className="mb-5">
-                      <h4 className="text-body-color mb-3 text-sm font-medium">
-                        Popular Tags :
-                      </h4>
+                      <h4 className="text-body-color mb-3 text-sm font-medium">Populære tags:</h4>
                       <div className="flex items-center">
-                        <TagButton text="Design" />
-                        <TagButton text="Development" />
-                        <TagButton text="Info" />
+                        <TagButton text="Pant" />
+                        <TagButton text="Genbrug" />
+                        <TagButton text="Tips" />
                       </div>
                     </div>
                     <div className="mb-5">
-                      <h5 className="text-body-color mb-3 text-sm font-medium sm:text-right">
-                        Share this post :
-                      </h5>
+                      <h5 className="text-body-color mb-3 text-sm font-medium sm:text-right">Del indlægget:</h5>
                       <div className="flex items-center sm:justify-end">
                         <SharePost />
                       </div>
@@ -346,11 +313,11 @@ const BlogSidebarPage = () => {
                 <div className="flex items-center justify-between">
                   <input
                     type="text"
-                    placeholder="Search here..."
+                    placeholder="Søg her..."
                     className="border-stroke dark:text-body-color-dark dark:shadow-two text-body-color focus:border-primary dark:focus:border-primary mr-4 w-full rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden transition-all duration-300 dark:border-transparent dark:bg-[#2C303B] dark:focus:shadow-none"
                   />
                   <button
-                    aria-label="search button"
+                    aria-label="Søgeknap"
                     className="bg-primary flex h-[50px] w-full max-w-[50px] items-center justify-center rounded-xs text-white"
                   >
                     <svg
@@ -370,33 +337,19 @@ const BlogSidebarPage = () => {
               </div>
               <div className="shadow-three dark:bg-gray-dark mb-10 rounded-xs bg-white dark:shadow-none">
                 <h3 className="border-body-color/10 border-b px-8 py-4 text-lg font-semibold text-black dark:border-white/10 dark:text-white">
-                  Related Posts
+                  Relaterede indlæg
                 </h3>
                 <ul className="p-8">
-                  <li className="border-body-color/10 mb-6 border-b pb-6 dark:border-white/10">
-                    <RelatedPost
-                      title="Best way to boost your online sales."
-                      image="/images/blog/post-01.jpg"
-                      slug="#"
-                      date="12 Feb 2025"
-                    />
-                  </li>
-                  <li className="border-body-color/10 mb-6 border-b pb-6 dark:border-white/10">
-                    <RelatedPost
-                      title="50 Best web design tips & tricks that will help you."
-                      image="/images/blog/post-02.jpg"
-                      slug="#"
-                      date="15 Feb, 2024"
-                    />
-                  </li>
-                  <li>
-                    <RelatedPost
-                      title="The 8 best landing page builders, reviewed"
-                      image="/images/blog/post-03.jpg"
-                      slug="#"
-                      date="05 Jun, 2024"
-                    />
-                  </li>
+                  {blogData.map((b, i) => (
+                    <li key={b.slug} className={i < blogData.length - 1 ? "border-body-color/10 mb-6 border-b pb-6 dark:border-white/10" : ""}>
+                      <RelatedPost
+                        title={b.title}
+                        image={b.image}
+                        slug={`/blog/${b.slug}`}
+                        date={b.publishDate}
+                      />
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="shadow-three dark:bg-gray-dark mb-10 rounded-xs bg-white dark:shadow-none">

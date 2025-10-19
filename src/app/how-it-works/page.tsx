@@ -16,11 +16,42 @@ export const metadata: Metadata = {
     description:
       "Fra opslag til overlevering – sådan fungerer PantMig på få minutter.",
   },
+  alternates: {
+    canonical: "/how-it-works",
+    languages: {
+      da: "/saadan-virker-det",
+      en: "/how-it-works",
+    },
+  },
 };
 
 export default function HowItWorksPage() {
   return (
     <>
+      {/* BreadcrumbList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Forside',
+                item: 'https://pantmig.dk/',
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Sådan virker det',
+                item: 'https://pantmig.dk/saadan-virker-det',
+              },
+            ],
+          }),
+        }}
+      />
       <Breadcrumb
         pageName="Sådan virker det"
         description="Fra opslag til overlevering – sådan fungerer PantMig på få minutter."

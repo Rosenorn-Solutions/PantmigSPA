@@ -133,3 +133,8 @@ layer(base);
     @apply inline-flex;
   }
 }
+
+/* Utility class to replace inline style maskType: alpha on SVG <mask> */
+.mask-alpha {
+  mask-type: alpha;
+}

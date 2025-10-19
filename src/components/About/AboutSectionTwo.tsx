@@ -11,16 +11,16 @@ const AboutSectionTwo = () => {
               data-wow-delay=".15s"
             >
               <Image
-                src="/images/about/about-image-2.svg"
+                src="/images/about/about-image-2.png"
                 alt="about image"
                 fill
-                className="drop-shadow-three dark:hidden dark:drop-shadow-none"
+                className="drop-shadow-three dark:hidden dark:drop-shadow-none rounded-2xl object-cover border border-black/20 dark:border-transparent"
               />
               <Image
-                src="/images/about/about-image-2-dark.svg"
+                src="/images/about/about-image-2.png"
                 alt="about image"
                 fill
-                className="hidden drop-shadow-three dark:block dark:drop-shadow-none"
+                className="hidden drop-shadow-three dark:block dark:drop-shadow-none rounded-2xl object-cover border border-black/20 dark:border-transparent"
               />
             </div>
           </div>

@@ -18,6 +18,31 @@ PantMig is a Danish marketplace that connects people who have lots of recyclable
   - Global metadata wired with `metadataBase: https://pantmig.dk`
 - App Router structure (Next.js 15), React 19, Tailwind CSS v4, TypeScript
 
+### Contact form (email)
+
+The Contact page posts to a server route that sends an email via SMTP.
+
+- API route: `POST /api/contact`
+- Default recipient: `pantmig@pantmig.dk` (can be overridden via env)
+- Configure SMTP via `.env.local` using the variables below.
+
+Environment variables (see `.env.local.example`):
+
+```
+SMTP_HOST=...
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=...
+SMTP_PASS=...
+CONTACT_TO=pantmig@pantmig.dk
+CONTACT_FROM="PantMig <no-reply@pantmig.dk>"
+```
+
+Notes:
+
+- Use a verified sender address for your SMTP provider.
+- The route uses the Node.js runtime and is not cached (`dynamic = "force-dynamic"`).
+
 ## Tech stack
 
 - Next.js 15 (App Router)
@@ -129,6 +154,7 @@ PantMig works great on Vercel or any Node hosting that supports Next.js 15.
 - Build command: `next build`
 - Start command: `next start` (or use Vercel’s serverless/edge defaults)
 - Ensure the domain is set to `https://pantmig.dk` so OG images resolve correctly (already set via `metadataBase`).
+ - Set SMTP and contact environment variables in your hosting provider.
 
 ## Troubleshooting
 

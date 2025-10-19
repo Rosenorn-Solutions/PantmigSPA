@@ -9,10 +9,15 @@ const PricingBox = (props: {
 
   return (
     <div className="w-full">
-      <div className="shadow-three hover:shadow-one dark:bg-gray-dark dark:shadow-two dark:hover:shadow-gray-dark relative z-10 rounded-xs bg-white px-8 py-10">
+      <div className="shadow-two hover:shadow-one dark:bg-dark dark:shadow-three dark:hover:shadow-gray-dark relative z-10 rounded-xs bg-white p-8 duration-300 lg:px-5 xl:px-8">
+        {/* Top accent bar for subtle separation from white page background */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[3px] rounded-t-xs bg-gradient-to-r from-primary via-primary/70 to-primary/30 dark:from-primary dark:via-primary/70 dark:to-primary/40"
+        />
         <div className="flex items-center justify-between">
           <h3 className="price mb-2 text-[32px] font-bold text-black dark:text-white">
-            $<span className="amount">{price}</span>
+            <span className="amount">{price}</span>
             <span className="time text-body-color text-lg font-medium">
               /{duration}
             </span>
@@ -23,8 +28,14 @@ const PricingBox = (props: {
         </div>
         <p className="text-body-color mb-7 text-base">{subtitle}</p>
         <div className="border-body-color/10 mb-8 border-b pb-8 dark:border-white/10">
-          <button className="bg-primary/80 hover:shadow-signUp flex w-full items-center justify-center rounded-xs p-3 text-base font-semibold text-white transition duration-300 ease-in-out">
-            Start Free Trial
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            title="Funktion kommer snart"
+            className="bg-primary/70 flex w-full items-center justify-center rounded-xs p-3 text-base font-semibold text-white/80 transition-opacity duration-300 ease-in-out cursor-not-allowed select-none opacity-70"
+          >
+            Kommer snart!
           </button>
         </div>
         <div>{children}</div>

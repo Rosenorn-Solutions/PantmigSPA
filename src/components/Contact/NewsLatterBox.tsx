@@ -1,40 +1,104 @@
 "use client";
 
+import { useState } from "react";
 import { useTheme } from "next-themes";
+
+type Status = { type: "idle" | "loading" | "success" | "error"; message?: string };
 
 const NewsLatterBox = () => {
   const { theme } = useTheme();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<Status>({ type: "idle" });
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (status.type === "loading") return;
+
+    // basic validation
+    if (!name.trim() || !email.trim()) {
+      setStatus({ type: "error", message: "Udfyld venligst både navn og e-mail." });
+      return;
+    }
+    if (!/[^\s@]+@[^\s@]+\.[^\s@]+/.test(email)) {
+      setStatus({ type: "error", message: "Indtast en gyldig e-mailadresse." });
+      return;
+    }
+
+    setStatus({ type: "loading" });
+    try {
+      const res = await fetch("https://api.pantmig.dk/newsletter/subscribe", {
+        method: "POST",
+        headers: { "content-type": "application/json", accept: "application/json" },
+        body: JSON.stringify({ name: name.trim(), email: email.trim() }),
+        // keep credentials omitted; CORS assumed to allow this origin
+      });
+      const data = (await res.json().catch(() => ({}))) as { success?: boolean; error?: string };
+      if (!res.ok || data?.success === false) {
+        throw new Error(data?.error || "Kunne ikke tilmelde. Prøv igen senere.");
+      }
+      setStatus({ type: "success", message: "Tak! Du er nu tilmeldt nyhedsbrevet." });
+      setName("");
+      setEmail("");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Noget gik galt.";
+      setStatus({ type: "error", message: msg });
+    }
+  };
 
   return (
-    <div className="shadow-three dark:bg-gray-dark relative z-10 rounded-xs bg-white p-8 sm:p-11 lg:p-8 xl:p-11">
+  <div className="shadow-two hover:shadow-one dark:bg-gray-dark dark:shadow-three dark:hover:shadow-gray-dark relative z-10 rounded-xs bg-white p-8 sm:p-11 lg:p-8 xl:p-11 duration-300">
+      {/* Top accent bar */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[3px] rounded-t-xs bg-gradient-to-r from-green-500 via-green-500/70 to-green-500/30 dark:from-green-400 dark:via-green-400/70 dark:to-green-400/40"
+      />
       <h3 className="mb-4 text-2xl leading-tight font-bold text-black dark:text-white">
         Få nyt om PantMig
       </h3>
       <p className="border-body-color/25 text-body-color mb-11 border-b pb-11 text-base leading-relaxed dark:border-white/25">
         Tilmeld dig nyheder om funktioner og gode tips til pant – ingen spam.
       </p>
-      <div>
+      <form onSubmit={onSubmit} noValidate>
         <input
           type="text"
           name="name"
           placeholder="Dit navn"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          autoComplete="name"
           className="border-stroke text-body-color focus:border-primary dark:text-body-color-dark dark:shadow-two dark:focus:border-primary mb-4 w-full rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden dark:border-transparent dark:bg-[#2C303B] dark:focus:shadow-none"
         />
         <input
           type="email"
           name="email"
           placeholder="Din e-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
           className="border-stroke text-body-color focus:border-primary dark:text-body-color-dark dark:shadow-two dark:focus:border-primary mb-4 w-full rounded-xs border bg-[#f8f8f8] px-6 py-3 text-base outline-hidden dark:border-transparent dark:bg-[#2C303B] dark:focus:shadow-none"
         />
-        <input
+        <button
           type="submit"
-          value="Tilmeld"
-          className="bg-primary shadow-submit hover:bg-primary/90 dark:shadow-submit-dark mb-5 flex w-full cursor-pointer items-center justify-center rounded-xs px-9 py-4 text-base font-medium text-white duration-300"
-        />
+          disabled={status.type === "loading"}
+          className="bg-primary shadow-submit hover:bg-primary/90 dark:shadow-submit-dark mb-3 flex w-full items-center justify-center rounded-xs px-9 py-4 text-base font-medium text-white duration-300 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {status.type === "loading" ? "Tilmeld…" : "Tilmeld"}
+        </button>
+        {status.type === "error" && (
+          <p className="text-red-600 dark:text-red-400 mb-2 text-center text-sm" aria-live="polite">
+            {status.message}
+          </p>
+        )}
+        {status.type === "success" && (
+          <p className="text-green-600 dark:text-green-400 mb-2 text-center text-sm" aria-live="polite">
+            {status.message}
+          </p>
+        )}
         <p className="text-body-color dark:text-body-color-dark text-center text-base leading-relaxed">
           Vi passer på dine data og sender kun relevant info.
         </p>
-      </div>
+      </form>
 
       <div>
         <span className="absolute top-7 left-2">

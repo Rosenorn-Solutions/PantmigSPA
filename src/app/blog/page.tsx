@@ -5,8 +5,9 @@ import Breadcrumb from "@/components/Common/Breadcrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog | PantMig",
-  description: "Nyheder, tips og historier om pant og genanvendelse i Danmark.",
+  title: "Seneste fra bloggen | PantMig",
+  description:
+    "Nyt om pant, tips til sortering og historier fra PantMig-fællesskabet.",
   // other metadata
 };
 
@@ -14,8 +15,8 @@ const Blog = () => {
   return (
     <>
       <Breadcrumb
-        pageName="Blog"
-        description="Læs guides, tips og historier fra PantMig-fællesskabet."
+        pageName="Seneste fra bloggen"
+        description="Nyt om pant, tips til sortering og historier fra PantMig-fællesskabet."
       />
 
       <section className="pt-[120px] pb-[120px]">

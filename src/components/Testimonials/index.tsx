@@ -5,29 +5,29 @@ import SingleTestimonial from "./SingleTestimonial";
 const testimonialData: Testimonial[] = [
   {
     id: 1,
-    name: "Mette Jensen",
+    name: "Mette myresluger",
     designation: "Frederiksberg",
     content:
-      "Jeg slap for at køre med store poser – en sød indsamler hentede det samme aften. Super nemt!",
-    image: "/images/testimonials/auth-01.png",
+      "Jeg slap for at køre med store poser – en sød indsamler hentede det samme aften.",
+  image: "/images/testimonials/auth-01.svg",
     star: 5,
   },
   {
     id: 2,
-    name: "Ahmed Khan",
+    name: "Dorte Dovendyr",
     designation: "Aalborg",
     content:
       "Jeg samler ofte pant efter arbejde. PantMig gør det let at finde lokale opslag og aftale hurtigt.",
-    image: "/images/testimonials/auth-02.png",
+  image: "/images/testimonials/auth-02.svg",
     star: 5,
   },
   {
     id: 3,
-    name: "Sofie Lund",
+    name: "Kenneth Ko",
     designation: "Odense",
     content:
       "Fedt at min pant ikke bare står og fylder – andre får glæde af den, og miljøet vinder også.",
-    image: "/images/testimonials/auth-03.png",
+  image: "/images/testimonials/auth-03.svg",
     star: 5,
   },
 ];

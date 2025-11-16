@@ -60,6 +60,8 @@ jobs:
               exit 1
             fi
             cd "$APP_DIR"
+            echo "===> Configure git safe.directory"
+            git config --global --add safe.directory "$APP_DIR" || true
             echo "===> Git fetch/reset"
             git fetch --prune origin
             git checkout -f main
@@ -74,10 +76,9 @@ jobs:
             npm ci
             npm run build
 
-            echo "===> Fix permissions (if needed)"
-            if id github-actions >/dev/null 2>&1; then
-              sudo chown -R github-actions:github-actions "$APP_DIR" || true
-            fi
+            echo "===> Fix ownership and permissions for service"
+            sudo chown -R "$USER":"$USER" "$APP_DIR" || true
+            sudo chmod -R a+rX "$APP_DIR" || true
 
             echo "===> Restart service"
             sudo systemctl daemon-reload || true

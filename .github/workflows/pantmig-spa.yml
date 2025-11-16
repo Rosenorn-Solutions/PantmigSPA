@@ -1,0 +1,100 @@
+name: Pantmig SPA CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+concurrency:
+  group: pantmig-spa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npx tsc -p tsconfig.json --noEmit
+
+      - name: Build (Next.js)
+        run: npm run build
+
+      - name: Package standalone artifact
+        run: |
+          test -d .next/standalone || { echo "Standalone bundle missing. Is output: 'standalone' set?" >&2; exit 1; }
+          tar -czf release.tar.gz .next/standalone .next/static public
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pantmig-spa-release
+          path: release.tar.gz
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    environment: Development
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pantmig-spa-release
+          path: .
+
+      - name: Upload artifact to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.SERVER_NAME }}
+          username: ${{ vars.SERVER_USER }}
+          key: ${{ secrets.SERVER_ROOT_CERTIFICATE }}
+          source: "release.tar.gz"
+          target: "/var/www/pantmig/spa/PantmigSPA/"
+
+      - name: Extract and restart service
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.SERVER_NAME }}
+          username: ${{ vars.SERVER_USER }}
+          key: ${{ secrets.SERVER_ROOT_CERTIFICATE }}
+          script: |
+            set -e
+            APP_DIR="/var/www/pantmig/spa/PantmigSPA"
+            cd "$APP_DIR"
+            test -f release.tar.gz || { echo "release.tar.gz not found at $APP_DIR" >&2; exit 1; }
+            echo "===> Extracting release"
+            rm -rf .next public
+            tar -xzf release.tar.gz
+            rm -f release.tar.gz
+            # Ensure permissions are sane (non-fatal if not needed)
+            sudo chown -R $USER:$USER "$APP_DIR" || true
+
+            # Reminder: pantmigspa.service should run: ExecStart=/usr/bin/node .next/standalone/server.js
+            if ! grep -q "standalone/server.js" "/etc/systemd/system/pantmigspa.service" 2>/dev/null; then
+              echo "WARNING: Service may not run the standalone server. Ensure ExecStart=\"/usr/bin/node .next/standalone/server.js\"" >&2
+            fi
+
+            echo "===> Restart service"
+            sudo systemctl daemon-reload || true
+            sudo systemctl restart pantmigspa.service
+            sudo systemctl status pantmigspa.service --no-pager || true

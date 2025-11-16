@@ -2,7 +2,6 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <>
       <section
         id="home"
         className="relative z-10 overflow-hidden bg-white pb-16 pt-[120px] dark:bg-gray-dark md:pb-[120px] md:pt-[150px] xl:pb-[160px] xl:pt-[180px] 2xl:pb-[200px] 2xl:pt-[210px]"
@@ -25,6 +24,13 @@ const Hero = () => {
                     className="rounded-xs bg-primary px-8 py-4 text-base font-semibold text-white duration-300 ease-in-out hover:bg-primary/80"
                   >
                     Sådan virker det
+                  </Link>
+                  <Link
+                    href="https://web.pantmig.dk/register"
+                    target="_self"
+                    className="rounded-xs border border-primary px-8 py-4 text-base font-semibold text-primary duration-300 ease-in-out hover:bg-primary/10"
+                  >
+                    Kom i gang
                   </Link>
                 </div>
               </div>
@@ -273,7 +279,6 @@ const Hero = () => {
           </svg>
         </div>
       </section>
-    </>
   );
 };
 

@@ -50,7 +50,9 @@ jobs:
 
       - name: Create source archive (exclude build artifacts)
         run: |
-          tar -czf source.tar.gz \
+          set -e
+          TAR_FLAGS="--warning=no-file-changed --ignore-failed-read"
+          tar -czf source.tar.gz $TAR_FLAGS \
             --exclude=.git \
             --exclude=node_modules \
             --exclude=.next \

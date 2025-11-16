@@ -86,8 +86,18 @@ jobs:
             rm -rf .next public
             tar -xzf release.tar.gz
             rm -f release.tar.gz
-            # Ensure permissions are sane (non-fatal if not needed)
-            sudo chown -R $USER:$USER "$APP_DIR" || true
+            # Ensure ownership matches service user
+            if id github-actions >/dev/null 2>&1; then
+              sudo chown -R github-actions:github-actions "$APP_DIR" || true
+            else
+              sudo chown -R $USER:$USER "$APP_DIR" || true
+            fi
+            # Ensure read/execute for public and .next
+            sudo chmod -R u+rwX,go+rX "$APP_DIR/public" "$APP_DIR/.next" || true
+
+            echo "===> Sanity check of public assets"
+            test -s "$APP_DIR/public/images/logo/logo-light.png" && echo "OK logo-light.png" || echo "MISSING: logo-light.png"
+            test -s "$APP_DIR/public/images/blog/blog-01.jpg" && echo "OK blog-01.jpg" || echo "MISSING: blog-01.jpg"
 
             # Reminder: pantmigspa.service should run: ExecStart=/usr/bin/node .next/standalone/server.js
             if ! grep -q "standalone/server.js" "/etc/systemd/system/pantmigspa.service" 2>/dev/null; then

@@ -39,69 +39,44 @@ jobs:
       - name: Build (Next.js)
         run: npm run build
 
-      - name: Package standalone artifact
-        run: |
-          test -d .next/standalone || { echo "Standalone bundle missing. Is output: 'standalone' set?" >&2; exit 1; }
-          tar -czf release.tar.gz .next/standalone .next/static public
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: pantmig-spa-release
-          path: release.tar.gz
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     environment: Development
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: pantmig-spa-release
-          path: .
-
-      - name: Upload artifact to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ vars.SERVER_NAME }}
-          username: ${{ vars.SERVER_USER }}
-          key: ${{ secrets.SERVER_ROOT_CERTIFICATE }}
-          source: "release.tar.gz"
-          target: "/var/www/pantmig/spa/PantmigSPA/"
-
-      - name: Extract and restart service
+      - name: Deploy via SSH (git pull, build, restart)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ vars.SERVER_NAME }}
           username: ${{ vars.SERVER_USER }}
           key: ${{ secrets.SERVER_ROOT_CERTIFICATE }}
+          envs: GITHUB_SHA
           script: |
             set -e
             APP_DIR="/var/www/pantmig/spa/PantmigSPA"
+            if [ ! -d "$APP_DIR/.git" ]; then
+              echo "ERROR: $APP_DIR is not a git repository. Please clone the repo there first." >&2
+              exit 1
+            fi
             cd "$APP_DIR"
-            test -f release.tar.gz || { echo "release.tar.gz not found at $APP_DIR" >&2; exit 1; }
-            echo "===> Extracting release"
-            rm -rf .next public
-            tar -xzf release.tar.gz
-            rm -f release.tar.gz
-            # Ensure ownership matches service user
+            echo "===> Git fetch/reset"
+            git fetch --prune origin
+            git checkout -f main
+            if [ -n "$GITHUB_SHA" ]; then
+              git reset --hard "$GITHUB_SHA"
+            else
+              git reset --hard origin/main
+            fi
+
+            echo "===> Clean install & build"
+            rm -rf node_modules .next
+            npm ci
+            npm run build
+
+            echo "===> Fix permissions (if needed)"
             if id github-actions >/dev/null 2>&1; then
               sudo chown -R github-actions:github-actions "$APP_DIR" || true
-            else
-              sudo chown -R $USER:$USER "$APP_DIR" || true
-            fi
-            # Ensure read/execute for public and .next
-            sudo chmod -R u+rwX,go+rX "$APP_DIR/public" "$APP_DIR/.next" || true
-
-            echo "===> Sanity check of public assets"
-            test -s "$APP_DIR/public/images/logo/logo-light.png" && echo "OK logo-light.png" || echo "MISSING: logo-light.png"
-            test -s "$APP_DIR/public/images/blog/blog-01.jpg" && echo "OK blog-01.jpg" || echo "MISSING: blog-01.jpg"
-
-            # Reminder: pantmigspa.service should run: ExecStart=/usr/bin/node .next/standalone/server.js
-            if ! grep -q "standalone/server.js" "/etc/systemd/system/pantmigspa.service" 2>/dev/null; then
-              echo "WARNING: Service may not run the standalone server. Ensure ExecStart=\"/usr/bin/node .next/standalone/server.js\"" >&2
             fi
 
             echo "===> Restart service"

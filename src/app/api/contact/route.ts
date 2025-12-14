@@ -12,8 +12,40 @@ type ContactBody = {
   company?: string;
 };
 
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX_REQUESTS = 5;
+const rateLimitHits = new Map<string, number[]>();
+
 function isValidEmail(email: string) {
-  return /[^\s@]+@[^\s@]+\.[^\s@]+/.test(email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function containsHeaderBreak(value: string) {
+  return /[\r\n]/.test(value);
+}
+
+function getClientKey(req: NextRequest) {
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) {
+    const first = forwarded.split(",")[0]?.trim();
+    if (first) return first;
+  }
+  const realIp = req.headers.get("x-real-ip")?.trim();
+  if (realIp) return realIp;
+  const cfIp = req.headers.get("cf-connecting-ip")?.trim();
+  if (cfIp) return cfIp;
+  const clientIp = (req as any)?.ip as string | undefined;
+  if (clientIp) return clientIp;
+  // Fall back to combining user agent to avoid collapsing all users into one bucket
+  return `anon:${req.headers.get("user-agent") ?? "unknown"}`;
+}
+
+function recordAndCheckRateLimit(key: string, now = Date.now()) {
+  const existing = rateLimitHits.get(key) ?? [];
+  const recent = existing.filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS);
+  recent.push(now);
+  rateLimitHits.set(key, recent);
+  return recent.length > RATE_LIMIT_MAX_REQUESTS;
 }
 
 function sanitize(value: unknown, maxLen = 5000) {
@@ -31,6 +63,20 @@ export async function POST(req: NextRequest) {
       return new Response(
         JSON.stringify({ error: "Content-Type must be application/json" }),
         { status: 415, headers: { "content-type": "application/json" } }
+      );
+    }
+
+    const clientKey = getClientKey(req);
+    if (recordAndCheckRateLimit(clientKey)) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again later." }),
+        {
+          status: 429,
+          headers: {
+            "content-type": "application/json",
+            "retry-after": Math.ceil(RATE_LIMIT_WINDOW_MS / 1000).toString(),
+          },
+        }
       );
     }
 
@@ -59,6 +105,13 @@ export async function POST(req: NextRequest) {
         status: 400,
         headers: { "content-type": "application/json" },
       });
+    }
+
+    if (containsHeaderBreak(name) || containsHeaderBreak(email)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid characters in name or email." }),
+        { status: 400, headers: { "content-type": "application/json" } }
+      );
     }
 
   const to = process.env.CONTACT_TO || "pantmig@pantmig.dk";

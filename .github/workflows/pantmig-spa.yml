@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [24.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -94,7 +94,7 @@ jobs:
             npm run build
 
             echo "===> Fix ownership and permissions for service"
-            sudo chown -R "$USER":"$USER" "$APP_DIR" || true
+            sudo chown -R pantmigservice:pantmigservice "$APP_DIR" || true
             sudo chmod -R a+rX "$APP_DIR" || true
 
             echo "===> Restart service"
